@@ -5,7 +5,7 @@
 <title>View Menu</title>
 </head>
 <body>
-	<form >
+	<form th:action="@{/addNewOrder}"method="post">
 		<table>
 		<tr th:each="currentMenu: ${menuItems}">
 		<td><input type="checkbox" value="${currentMenu.id}"></td>
