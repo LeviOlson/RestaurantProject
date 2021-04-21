@@ -5,15 +5,18 @@
 <title>View Menu</title>
 </head>
 <body>
-	<form>
+	<form >
 		<table>
 		<tr th:each="currentMenu: ${menuItems}">
+		<td><input type="checkbox" value="${currentMenu.id}"></td>
 			<td th:text="${currentMenu.id}" />
 			<td th:text="${currentMenu.itemName}" />
 			<!--  td th:text="${currentMenu.ingredients}" />-->
 			<td th:text="${currentMenu.price}" />
 			</tr>
 		</table>
+		<input type="submit" name="submit" value="submit"></input>
+		<input type="reset" name="clear" value="clear choices"></input>
 	</form>
 </body>
 </html>
