@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author djspi
+ *
+ */
+module RestaurantProject {
+}
