@@ -77,20 +77,6 @@ public class Order {
 		
 		return true;
 	}
-
-class CompareByTimeStamp implements Comparator<Order> {
-		
-		public int compare (Order a, Order b) {
-			if (a.getTimeStamp() < b.getTimeStamp()) {
-				return 1;
-			}
-			else if (a.getTimeStamp() == b.getTimeStamp()) {
-				return 0;
-			}
-			else {
-				return -1;
-			}
-		}
-	}
-	
 }
+
+

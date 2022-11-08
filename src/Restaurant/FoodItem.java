@@ -18,6 +18,8 @@ public class FoodItem {
 	
 	public FoodItem(FoodType type) {
 		this.type = type;
+		ready = false;
+		cookTime = 0;
 	}
 
 	/**

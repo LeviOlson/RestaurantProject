@@ -1,8 +1,11 @@
 package Restaurant;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
+
+import Restaurant.Order.OrderItem;
 
 public class Restuarant {
 	private Queue<Order> inLine;
@@ -19,11 +22,15 @@ public class Restuarant {
 	private int burgerBatchSize;
 	private int friesBatchSize;
 	private int drinkBatchSize;
+	private int orderFrequency;
+	private int minOrdersSpawn;
+	private int maxOrdersSpawn;
 	private int tick;
+	private int ordersServed;
 	
 	
 	public Restuarant(int burgerCookTime, int friesCookTime, int drinkCookTime, int orderTakingTime,
-			int orderDeliveryTime, int burgerBatchSize, int friesBatchSize, int drinkBatchSize) {
+			int orderDeliveryTime, int burgerBatchSize, int friesBatchSize, int drinkBatchSize, int orderFrequency, int minOrdersSpawn, int maxOrdersSpawn) {
 		this.burgerCookTime = burgerCookTime;
 		this.friesCookTime = friesCookTime;
 		this.drinkCookTime = drinkCookTime;
@@ -32,8 +39,12 @@ public class Restuarant {
 		this.burgerBatchSize = burgerBatchSize;
 		this.friesBatchSize = friesBatchSize;
 		this.drinkBatchSize = drinkBatchSize;
+		this.orderFrequency = orderFrequency;
+		this.minOrdersSpawn = minOrdersSpawn;
+		this.maxOrdersSpawn = maxOrdersSpawn;
 		
 		tick = 0;
+		ordersServed = 0;
 		burgers = new LinkedList<FoodItem>();
 		fries = new LinkedList<FoodItem>();
 		drinks = new LinkedList<FoodItem>();
@@ -45,6 +56,75 @@ public class Restuarant {
 	//advances the time by 1 tick
 	public void tick() {
 		tick++;
+		
+		if (tick % orderFrequency == 0) {
+			int amount = RestuarantUtil.getRandInt(minOrdersSpawn, maxOrdersSpawn);
+			
+			for (int i = 0; i < amount; i++) {
+				inLine.add(generateOrder());
+			}
+		}
+		
+		
+		//start new batch of each
+		for (FoodItem fi: burgers) {
+			if (!fi.isReady()) {
+				fi.increaseCookTime(1);
+				if (fi.getCookTime() >= burgerCookTime) {
+					fi.setReady(true);
+				}
+			}
+		}
+		for (FoodItem fi: fries) {
+			if (!fi.isReady()) {
+				fi.increaseCookTime(1);
+				if (fi.getCookTime() >= friesCookTime) {
+					fi.setReady(true);
+				}
+			}
+		}
+		for (FoodItem fi: drinks) {
+			if (!fi.isReady()) {
+				fi.increaseCookTime(1);
+				if (fi.getCookTime() >= drinkCookTime) {
+					fi.setReady(true);
+				}
+			}
+		}
+		
+		//move order to assembling if ticked
+		//move order to assembled if ready
+		//clear order
+	}
+	
+	public Order generateOrder() {
+		Order dummy = new Order(null, 0);
+		final int min = 0;
+		final int max = 5;
+		Order order = null;
+		ArrayList<OrderItem> items = new ArrayList<OrderItem>();
+		for (FoodType t: FoodType.values()) {
+			int amount = RestuarantUtil.getRandInt(min, max);
+			
+			for (int i = 0; i < amount; i++) {
+				OrderItem oi = dummy.new OrderItem(t, amount);
+				items.add(oi);
+			}
+			
+			order = new Order(items, tick);
+		}
+		return order;
+	}
+	
+	public String getStatus() {
+		String str = "";
+		
+		str += "Customers waiting to order: " + inLine.size();
+		str += "\nOrders being assembled: " + assembling.size();
+		str += "\nOrders waiting to be delivered: " + assembled.size();
+		str += "\nTotal orders served: " + ordersServed;
+		
+		return str;
 	}
 	
 	private void addToLine(Order o) {
@@ -65,9 +145,8 @@ public class Restuarant {
 	
 	private void deliver(Order o) {
 		assembled.remove(o);
+		ordersServed++;
 	}
-	
-	
 	
 	/**
 	 * @return the burgerCookTime
@@ -175,6 +254,50 @@ public class Restuarant {
 	 */
 	public void setOrderTakingTime(int orderTakingTime) {
 		this.orderTakingTime = orderTakingTime;
+	}
+	
+	
+
+	/**
+	 * @return the orderFrequency
+	 */
+	public int getOrderFrequency() {
+		return orderFrequency;
+	}
+
+	/**
+	 * @param orderFrequency the orderFrequency to set
+	 */
+	public void setOrderFrequency(int orderFrequency) {
+		this.orderFrequency = orderFrequency;
+	}
+
+	/**
+	 * @return the minOrdersSpawn
+	 */
+	public int getMinOrdersSpawn() {
+		return minOrdersSpawn;
+	}
+
+	/**
+	 * @param minOrdersSpawn the minOrdersSpawn to set
+	 */
+	public void setMinOrdersSpawn(int minOrdersSpawn) {
+		this.minOrdersSpawn = minOrdersSpawn;
+	}
+
+	/**
+	 * @return the maxOrdersSpawn
+	 */
+	public int getMaxOrdersSpawn() {
+		return maxOrdersSpawn;
+	}
+
+	/**
+	 * @param maxOrdersSpawn the maxOrdersSpawn to set
+	 */
+	public void setMaxOrdersSpawn(int maxOrdersSpawn) {
+		this.maxOrdersSpawn = maxOrdersSpawn;
 	}
 
 	/**
