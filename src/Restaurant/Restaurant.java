@@ -7,7 +7,7 @@ import java.util.Queue;
 
 import Restaurant.Order.OrderItem;
 
-public class Restuarant {
+public class Restaurant {
 	private Queue<Order> inLine;
 	private PriorityQueue<Order> assembling;
 	private PriorityQueue<Order> assembled;
@@ -26,10 +26,11 @@ public class Restuarant {
 	private int minOrdersSpawn;
 	private int maxOrdersSpawn;
 	private int tick;
+	private int currentDeliveryTick;
 	private int ordersServed;
 	
 	
-	public Restuarant(int burgerCookTime, int friesCookTime, int drinkCookTime, int orderTakingTime,
+	public Restaurant(int burgerCookTime, int friesCookTime, int drinkCookTime, int orderTakingTime,
 			int orderDeliveryTime, int burgerBatchSize, int friesBatchSize, int drinkBatchSize, int orderFrequency, int minOrdersSpawn, int maxOrdersSpawn) {
 		this.burgerCookTime = burgerCookTime;
 		this.friesCookTime = friesCookTime;
@@ -44,6 +45,7 @@ public class Restuarant {
 		this.maxOrdersSpawn = maxOrdersSpawn;
 		
 		tick = 0;
+		currentDeliveryTick = 0;
 		ordersServed = 0;
 		burgers = new LinkedList<FoodItem>();
 		fries = new LinkedList<FoodItem>();
@@ -57,16 +59,16 @@ public class Restuarant {
 	public void tick() {
 		tick++;
 		
+		//add a new order to the system when its been enough ticks
 		if (tick % orderFrequency == 0) {
-			int amount = RestuarantUtil.getRandInt(minOrdersSpawn, maxOrdersSpawn);
-			
+			int amount = RestaurantUtil.getRandInt(minOrdersSpawn, maxOrdersSpawn);
 			for (int i = 0; i < amount; i++) {
 				inLine.add(generateOrder());
 			}
 		}
 		
 		
-		//start new batch of each
+		//start new batch of each food item type
 		for (FoodItem fi: burgers) {
 			if (!fi.isReady()) {
 				fi.increaseCookTime(1);
@@ -92,9 +94,37 @@ public class Restuarant {
 			}
 		}
 		
-		//move order to assembling if ticked
-		//move order to assembled if ready
-		//clear order
+		//if the order being taken right now is done being taken, move it to assembly and start taking the next order
+		if (!inLine.isEmpty() && tick - inLine.peek().getTimeStamp() >= orderTakingTime) {
+			moveToAssembly();
+		}
+		
+		//move orders to assembled if enough food is ready
+		for (Order o: assembling) {
+			if (amountReady(burgers) >= o.getQuantity(FoodType.BURGER) || amountReady(fries) >= o.getQuantity(FoodType.FRIES) || amountReady(drinks) >= o.getQuantity(FoodType.DRINK)) {
+				moveToAssembled(o);
+			}
+		}
+		
+		//deliver the next ready order if the amount of ticks it takes to deliver an order has passed
+		if (currentDeliveryTick >= orderDeliveryTime) {
+			deliver();
+			currentDeliveryTick = 0;
+		}
+		else if (!assembled.isEmpty()){
+			currentDeliveryTick++;
+		}
+	}
+
+	public int amountReady(Queue<FoodItem> lst) {
+		int n = 0;
+		for (FoodItem fi: lst) {
+			if (fi.isReady()) {
+				n++;
+			}
+		}
+		
+		return n;
 	}
 	
 	public Order generateOrder() {
@@ -104,7 +134,7 @@ public class Restuarant {
 		Order order = null;
 		ArrayList<OrderItem> items = new ArrayList<OrderItem>();
 		for (FoodType t: FoodType.values()) {
-			int amount = RestuarantUtil.getRandInt(min, max);
+			int amount = RestaurantUtil.getRandInt(min, max);
 			
 			for (int i = 0; i < amount; i++) {
 				OrderItem oi = dummy.new OrderItem(t, amount);
@@ -116,15 +146,32 @@ public class Restuarant {
 		return order;
 	}
 	
-	public String getStatus() {
-		String str = "";
+	public RestaurantStatus getStatus() {
+		return new RestaurantStatus(inLine.size(), assembling.size(), assembled.size(), highestWait(), ordersServed);
+	}
+	
+	public int highestWait() {
+		int highestWait = 0;
 		
-		str += "Customers waiting to order: " + inLine.size();
-		str += "\nOrders being assembled: " + assembling.size();
-		str += "\nOrders waiting to be delivered: " + assembled.size();
-		str += "\nTotal orders served: " + ordersServed;
+		for (Order o: inLine) {
+			if (tick - o.getTimeStamp() > highestWait) {
+				highestWait = tick = o.getTimeStamp();
+			}
+		}
 		
-		return str;
+		for (Order o: assembling) {
+			if (tick - o.getTimeStamp() > highestWait) {
+				highestWait = tick = o.getTimeStamp();
+			}
+		}
+		
+		for (Order o: assembled) {
+			if (tick - o.getTimeStamp() > highestWait) {
+				highestWait = tick = o.getTimeStamp();
+			}
+		}
+		
+		return highestWait;
 	}
 	
 	private void addToLine(Order o) {
@@ -137,14 +184,13 @@ public class Restuarant {
 		}
 	}
 	
-	private void moveToAssembled() {
-		if(!assembling.isEmpty()) {
-			assembled.offer(assembling.poll());
-			}
+	private void moveToAssembled(Order o) {
+		assembling.remove(o);
+		assembled.add(o);
 	}
 	
-	private void deliver(Order o) {
-		assembled.remove(o);
+	private void deliver() {
+		assembled.poll();
 		ordersServed++;
 	}
 	

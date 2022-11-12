@@ -3,7 +3,7 @@ package Restaurant;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class Order {
+public class Order implements Comparable<Order> {
 	
 	 class OrderItem {
 		FoodType item;
@@ -16,7 +16,7 @@ public class Order {
 	}
 	
 	private ArrayList<OrderItem> items;
-	int timeStamp;
+	private int timeStamp;
 
 	public Order(ArrayList<OrderItem> items, int timeStamp) {
 		this.items = items;
@@ -37,7 +37,18 @@ public class Order {
 		this.items = items;
 	}
 	
-	
+	public int getQuantity(FoodType type) {
+		int n = 0;
+		
+		for (OrderItem OI: items) {
+			if (OI.item == type) {
+				n = OI.quantity;
+				break;
+			}
+		}
+		
+		return n;
+	}
 	
 /**
 	 * @return the timeStamp
@@ -76,6 +87,11 @@ public class Order {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public int compareTo(Order o) {
+		return Integer.compare(timeStamp, o.getTimeStamp());
 	}
 }
 
