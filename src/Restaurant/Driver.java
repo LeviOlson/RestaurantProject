@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Driver {
 
 	public static void main(String[] args) {
-		Restaurant restuarant = defaultRestuarant();
+		Restaurant restuarant = RestaurantUtil.defaultRestuarant();
 		Scanner in = new Scanner(System.in);
 		String tickMessage = "Please enter how many ticks you would like to simulate. Enter a negative number to exit";
 		
@@ -38,7 +38,4 @@ public class Driver {
 		return input;
 	}
 	
-	public static Restaurant defaultRestuarant() {
-		return new Restaurant(80, 120, 15, 60, 20, 8, 8, 2, 30, 1, 5);
-	}
 }
