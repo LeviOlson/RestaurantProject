@@ -20,6 +20,11 @@ import java.awt.Insets;
 import Restaurant.Restaurant;
 import Restaurant.RestaurantUtil;
 
+/**
+ * The main window the user will see when the open the program
+ * @author Levi Olson
+ * @version 1.0
+ */
 public class MainWindow extends JFrame {
 
 	private JPanel contentPane;
@@ -208,6 +213,7 @@ public class MainWindow extends JFrame {
 		tfDeliverTime.setColumns(10);
 		contentPane.add(tfDeliverTime);
 		
+		//use custom will open a simulation window with the values the user entered, if the values entered are valid ints. If not it will not do anything
 		JButton btnGoCustom = new JButton("Use custom");
 		btnGoCustom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -225,6 +231,7 @@ public class MainWindow extends JFrame {
 		btnGoCustom.setBounds(0, 335, 131, 30);
 		contentPane.add(btnGoCustom);
 		
+		//exit button will close the program
 		JButton btnExit = new JButton("exit");
 		btnExit.setBounds(257, 335, 121, 30);
 		btnExit.addActionListener(new ActionListener() {
@@ -233,6 +240,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 		
+		//use default will open a simulation window with the default values from the RestaurantUtil class
 		JButton btnGoDefault = new JButton("Use default");
 		btnGoDefault.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

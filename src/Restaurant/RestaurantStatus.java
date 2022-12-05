@@ -1,5 +1,10 @@
 package Restaurant;
 
+/**
+ * Class to represent the status of a restaurant object so that it can be passed to another object, environment, or computer, without sending a restaurant objectg
+ * @author Levi Olson
+ * @version 1.0
+ */
 public class RestaurantStatus {
 	private int inLine;
 	private int assembled;
@@ -7,7 +12,6 @@ public class RestaurantStatus {
 	private int highestWait;
 	private int totalServed;
 	
-	//comments for getters are auto generated and may need to be updated for clarity
 	/**
 	 * @return the amount of people in line
 	 */
@@ -15,30 +19,38 @@ public class RestaurantStatus {
 		return inLine;
 	}
 	/**
-	 * @return the assembled
+	 * @return the number of orders that are assembled
 	 */
 	public int getAssembled() {
 		return assembled;
 	}
 	/**
-	 * @return the assembling
+	 * @return the number or orders that are in assembly
 	 */
 	public int getAssembling() {
 		return assembling;
 	}
 	/**
-	 * @return the highestWait
+	 * @return the highest wait time currently
 	 */
 	public int getHighestWait() {
 		return highestWait;
 	}
 	/**
-	 * @return the totalServed
+	 * @return the total amount of customers served all time for this restaurant
 	 */
 	public int getTotalServed() {
 		return totalServed;
 	}
 	
+	/**
+	 * Creates a RestaurantStatus object with all relevant data
+	 * @param inLine the number of customers in line
+	 * @param assembling the amount of orders in assembly
+	 * @param assembled the amount of orders assembled
+	 * @param highestWait the highest wait time currently
+	 * @param totalServed the total amount of customers served all time for this restaurant
+	 */
 	public RestaurantStatus(int inLine, int assembling, int assembled, int highestWait, int totalServed) {
 		this.inLine = inLine;
 		this.assembling = assembling;
@@ -47,6 +59,10 @@ public class RestaurantStatus {
 		this.totalServed = totalServed;
 	}
 	
+	/**
+	 * Returns a string representation of the RestaurantStatus object
+	 * @return a paragraph describing the status of the restaurant
+	 */
 	public String toString() {
 		String str = "";
 		

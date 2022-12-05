@@ -6,7 +6,11 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import Restaurant.Order.OrderItem;
-
+/**
+ * Restaurant simulation
+ * @author Levi Olson
+ * @version 1.0
+ */
 public class Restaurant {
 	private Queue<Order> inLine;
 	private PriorityQueue<Order> assembling;
@@ -30,6 +34,9 @@ public class Restaurant {
 	private int ordersServed;
 	
 	
+	/**
+	 * Creates a restaurant object with all relevant data
+	 */
 	public Restaurant(int burgerCookTime, int friesCookTime, int drinkCookTime, int orderTakingTime,
 			int orderDeliveryTime, int burgerBatchSize, int friesBatchSize, int drinkBatchSize, int orderFrequency, int minOrdersSpawn, int maxOrdersSpawn) {
 		this.burgerCookTime = burgerCookTime;
@@ -55,7 +62,9 @@ public class Restaurant {
 		assembled = new PriorityQueue<Order>();
 	}
 
-	//advances the time by 1 tick
+	/**
+	 * Advances the simulation by 1 tick.
+	 */
 	public void tick() {
 		tick++;
 
@@ -115,10 +124,15 @@ public class Restaurant {
 			currentDeliveryTick++;
 		}
 	}
-
-	public int amountReady(Queue<FoodItem> lst) {
+	
+	/**
+	 * Return the amount of food that is ready from the given queue of food
+	 * @param q the queue of food
+	 * @return the amount of food  in the queue that is ready
+	 */
+	public int amountReady(Queue<FoodItem> q) {
 		int n = 0;
-		for (FoodItem fi: lst) {
+		for (FoodItem fi: q) {
 			if (fi.isReady()) {
 				n++;
 			}
@@ -127,6 +141,10 @@ public class Restaurant {
 		return n;
 	}
 	
+	/**
+	 * Generate a new order with random items
+	 * @return the order generated
+	 */
 	public Order generateOrder() {
 		Order dummy = new Order(null, 0);
 		final int min = 0;
@@ -146,10 +164,18 @@ public class Restaurant {
 		return order;
 	}
 	
+	/**
+	 * Generates a RestaurantStatus object with the relevant data from this restaurant
+	 * @return the object generated
+	 */
 	public RestaurantStatus getStatus() {
 		return new RestaurantStatus(inLine.size(), assembling.size(), assembled.size(), highestWait(), ordersServed);
 	}
 	
+	/**
+	 * finds the highest current wait time
+	 * @return the highest current wait time
+	 */
 	public int highestWait() {
 		int highestWait = 0;
 		
@@ -174,9 +200,6 @@ public class Restaurant {
 		return highestWait;
 	}
 	
-	private void addToLine(Order o) {
-		inLine.add(o);
-	}
 	
 	private void moveToAssembly() {
 		if(!inLine.isEmpty()) {
