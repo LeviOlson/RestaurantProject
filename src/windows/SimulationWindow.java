@@ -15,7 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+/**
+ * Window to simulate a restaurant with input and output
+ * @author Levi Olson
+ * @version 1.0
+ */
 public class SimulationWindow extends JFrame {
 
 	private JPanel contentPane;
@@ -78,6 +82,7 @@ public class SimulationWindow extends JFrame {
 		lblTotalServed.setBounds(10, 111, 416, 14);
 		contentPane.add(lblTotalServed);
 		
+		//tick button will cause the simulation to advance by 1 tick and then update the labels to display the up to date status of the restaurant
 		JButton btnTick = new JButton("Tick");
 		btnTick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -88,6 +93,7 @@ public class SimulationWindow extends JFrame {
 		btnTick.setBounds(10, 240, 89, 23);
 		contentPane.add(btnTick);
 		
+		//exit button will close the program
 		JButton btnExit = new JButton("exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -98,6 +104,9 @@ public class SimulationWindow extends JFrame {
 		contentPane.add(btnExit);
 	}
 	
+	/**
+	 * Updates all the labels to display the up to date status of the restaurant
+	 */
 	private void updateLabels() {
 		RestaurantStatus status = restaurant.getStatus();
 		lblAssembled.setText("assembled: " + status.getAssembled());

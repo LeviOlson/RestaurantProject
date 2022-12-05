@@ -200,18 +200,26 @@ public class Restaurant {
 		return highestWait;
 	}
 	
-	
+	/**
+	 * Moves the first order in line to assembly
+	 */
 	private void moveToAssembly() {
 		if(!inLine.isEmpty()) {
 		assembling.offer(inLine.poll());
 		}
 	}
 	
+	/**
+	 * Moves an order from assembly to assembled
+	 */
 	private void moveToAssembled(Order o) {
 		assembling.remove(o);
 		assembled.add(o);
 	}
 	
+	/**
+	 * delivers the order at the head of the assembled priority queue
+	 */
 	private void deliver() {
 		assembled.poll();
 		ordersServed++;
@@ -292,7 +300,6 @@ public class Restaurant {
 	/**
 	 * @return the inLine
 	 */
-	
 	
 	public Queue<Order> getInLine() {
 		return inLine;
