@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Restaurant.Driver;
 import Restaurant.Restaurant;
 import Restaurant.RestaurantStatus;
 import Restaurant.RestaurantUtil;
@@ -88,6 +89,11 @@ public class SimulationWindow extends JFrame {
 		contentPane.add(btnTick);
 		
 		JButton btnExit = new JButton("exit");
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		btnExit.setBounds(347, 240, 89, 23);
 		contentPane.add(btnExit);
 	}

@@ -3,9 +3,11 @@ package Restaurant;
 import java.util.Scanner;
 
 public class Driver {
+	
+	public static Restaurant r;
 
 	public static void main(String[] args) {
-		Restaurant restuarant = RestaurantUtil.defaultRestuarant();
+		r = RestaurantUtil.defaultRestuarant();
 		Scanner in = new Scanner(System.in);
 		String tickMessage = "Please enter how many ticks you would like to simulate. Enter a negative number to exit";
 		
@@ -17,11 +19,11 @@ public class Driver {
 			}
 			
 			for (int i = 0; i < ticks; i++) {
-				restuarant.tick();
+				r.tick();
 				System.out.println();
 			}
 			
-			System.out.println(restuarant.getStatus());
+			System.out.println(r.getStatus());
 		}
 	}
 	
@@ -38,4 +40,11 @@ public class Driver {
 		return input;
 	}
 	
+	public static void print() {
+		System.out.println(r.getStatus());
+	}
+	
+	public static void setRestaurant(Restaurant res) {
+		r = res;
+	}
 }

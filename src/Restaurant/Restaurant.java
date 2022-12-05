@@ -58,7 +58,7 @@ public class Restaurant {
 	//advances the time by 1 tick
 	public void tick() {
 		tick++;
-		
+
 		//add a new order to the system when its been enough ticks
 		if (tick % orderFrequency == 0) {
 			int amount = RestaurantUtil.getRandInt(minOrdersSpawn, maxOrdersSpawn);
@@ -155,19 +155,19 @@ public class Restaurant {
 		
 		for (Order o: inLine) {
 			if (tick - o.getTimeStamp() > highestWait) {
-				highestWait = tick = o.getTimeStamp();
+				highestWait = tick - o.getTimeStamp();
 			}
 		}
 		
 		for (Order o: assembling) {
 			if (tick - o.getTimeStamp() > highestWait) {
-				highestWait = tick = o.getTimeStamp();
+				highestWait = tick - o.getTimeStamp();
 			}
 		}
 		
 		for (Order o: assembled) {
 			if (tick - o.getTimeStamp() > highestWait) {
-				highestWait = tick = o.getTimeStamp();
+				highestWait = tick - o.getTimeStamp();
 			}
 		}
 		
